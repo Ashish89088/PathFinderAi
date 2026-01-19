@@ -53,6 +53,13 @@ def submit_profile(data: ProfileCreate, db: Session = Depends(get_db)):
         "academics": data.academics,
         "platforms": data.platforms
     })
+    # print("NORMALIZED PROFILE DATA:", data)
+    # profile = db.query(Profile).filter(Profile.user_id == user_id).first()
+
+    # if not profile:
+    #     raise HTTPException(status_code=404, detail="Profile not found")
+    
+    # normalized_data = normalize_profile(profile)
 
     print("NORMALIZED PROFILE:", normalized_data)
 

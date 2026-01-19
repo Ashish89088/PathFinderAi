@@ -1,4 +1,4 @@
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Union
 
 TECH_KEYWORDS = [
     "ai", "machine learning", "backend", "frontend",
@@ -27,20 +27,33 @@ def score_from_keywords(values: List[str], keywords: List[str]) -> float:
 
     return round(min(count / len(values), 1.0), 2)
 
-def normalize_profile(profile: Dict[str, Any]) -> Dict[str, Any]:
-    # interests = profile.get("interests", []) or []
-    # hobbies = profile.get("hobbies", []) or []
-    # academics = profile.get("academics", {}) or {}
-    # platforms = profile.get("platforms", {}) or {}
-    interests = profile.interests or []
-    hobbies = profile.hobbies or []
-    academics = profile.academics or []
-    platforms = profile.platforms or []
 
+def _get_attr(obj: Union[Dict[str, Any], Any], key: str, default=None):
+    """
+    Helper to safely get value from dict or object
+    """
+    if isinstance(obj, dict):
+        return obj.get(key, default)
+    return getattr(obj, key, default)
+
+
+def normalize_profile(profile: Union[Dict[str, Any], Any]) -> Dict[str, Any]:
+    """
+    Normalize a user profile into a dict, scoring keyword inclinations
+    """
+
+    # Extract fields safely
+    interests = _get_attr(profile, "interests", []) or []
+    hobbies = _get_attr(profile, "hobbies", []) or []
+    academics = _get_attr(profile, "academics", {}) or {}
+    platforms = _get_attr(profile, "platforms", {}) or {}
+
+    # Keyword-based signals
     tech_score = score_from_keywords(interests, TECH_KEYWORDS)
     creative_score = score_from_keywords(hobbies, CREATIVE_KEYWORDS)
     sports_score = score_from_keywords(hobbies, SPORTS_KEYWORDS)
 
+    # Discipline score from CGPA or default
     discipline_score = 0.5
     if "cgpa" in academics:
         try:
@@ -49,10 +62,12 @@ def normalize_profile(profile: Dict[str, Any]) -> Dict[str, Any]:
         except:
             pass
 
+    # Coding presence signal
     coding_presence = 0.0
     if platforms.get("leetcode") or platforms.get("github"):
         coding_presence = 0.8
 
+    # Return a plain dict
     return {
         "signals": {
             "tech_inclination": tech_score,
