@@ -13,6 +13,9 @@ from app.ai.orchestrator import run_career_ai_pipeline
 from app.services.gemini import call_gemini
 from app.services.career_analysis_service import save_career_analysis
 
+from fastapi.responses import StreamingResponse
+from app.services.gemini_stream import gemini_stream
+
 
 router = APIRouter(prefix="/api", tags=["Profile"])
 
@@ -72,10 +75,7 @@ from app.models.profile import Profile
     
 
 @router.post("/analyze-profile")
-# def analyze_profile(
-#     user_id: UUID,
-#     db: Session = Depends(get_db)
-# ):
+
 def analyze_profile(user_id: UUID, db: Session = Depends(get_db)):
     profile = db.query(Profile).filter(Profile.user_id == user_id).first()
 
@@ -83,7 +83,6 @@ def analyze_profile(user_id: UUID, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Profile not found")
 
     # 1. Load normalized profile
-    # normalized_profile = get_normalized_profile(user_id)
     normalized_profile = normalize_profile(profile)
 
     # 2. Call Gemini
@@ -107,3 +106,14 @@ def analyze_profile(user_id: UUID, db: Session = Depends(get_db)):
         "opportunities": analysis.opportunities
     }
 
+
+@router.get("/api/analyze-profile/stream")
+def analyze_profile_stream(user_id: UUID, db: Session = Depends(get_db)):
+    # fetch + normalize profile (reuse your logic)
+    profile = db.query(Profile).filter(Profile.user_id == user_id).first()
+    normalized = normalize_profile(profile)
+
+    return StreamingResponse(
+        gemini_stream(normalized),
+        media_type="text/event-stream"
+    )
