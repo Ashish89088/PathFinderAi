@@ -1,12 +1,13 @@
 from pydantic import BaseModel
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 
 class ProfileCreate(BaseModel):
     name: str
-    age: int
+    age: Optional[int]
+
     academics: Dict[str, Any]
-    interests: Optional[str]
-    hobbies: Optional[str]
+    interests: List[str]
+    hobbies: List[str]
     platforms: Dict[str, Any]
 
 class ProfileResponse(BaseModel):
