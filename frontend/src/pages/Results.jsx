@@ -5,15 +5,20 @@ const mockData = {
     {
       career: "Software Engineer",
       reasoning: "Strong tech inclination and coding presence",
-      confidence: 0.82
-    },
-    {
-      career: "Product Manager",
-      reasoning: "Interest in startups and product thinking",
-      confidence: 0.68
+      confidence: 0.82,
+      roadmap: [
+        "Master DSA",
+        "Build 3 real-world projects",
+        "Apply for internships"
+      ],
+      opportunities: {
+        certifications: ["AWS", "Google Cloud"],
+        events: ["Hackathons", "Meetups"]
+      }
     }
   ]
 };
+
 
 export default function Results() {
   return (
