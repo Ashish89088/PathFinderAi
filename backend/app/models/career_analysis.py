@@ -13,4 +13,5 @@ class CareerAnalysis(Base):
     career_recommendations = Column(JSONB)
     roadmaps = Column(JSONB)
     opportunities = Column(JSONB)
+    raw_ai_output = Column(JSONB)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
