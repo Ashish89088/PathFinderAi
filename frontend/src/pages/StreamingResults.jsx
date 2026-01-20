@@ -1,18 +1,31 @@
 import useGeminiStream from "../hooks/useGeminiStream";
+import { useEffect, useRef } from "react";
 
-export default function StreamingResults() {
-  const events = useGeminiStream("USER_ID_HERE");
 
-  return (
-    <div className="p-6 max-w-3xl mx-auto">
-      <h1 className="text-xl font-bold mb-4">AI Career Analysis</h1>
+export default function StreamingResults({ userId, onComplete }) {
 
-      {events.map((e, idx) => (
-        <div key={idx} className="mb-3 p-3 border rounded">
-          <p className="text-sm font-semibold">{e.message}</p>
-          <pre className="text-xs mt-2 bg-gray-100 p-2 rounded">
-            {JSON.stringify(e.data, null, 2)}
-          </pre>
+  const events = useGeminiStream(userId);
+  const completedRef = useRef(false);
+
+  useEffect(() => {
+    if (!events.length) return;
+
+    const last = events[events.length - 1];
+
+    if (last.stage === "final_result" && !completedRef.current) {
+      completedRef.current = true; // 🔒 prevent double call
+      onComplete(last.data);
+    }
+  }, [events, onComplete]);
+
+    return (
+    <div className="space-y-3">
+      <h2 className="font-semibold">Analyzing your profile...</h2>
+
+      {events.map((e, i) => (
+        <div key={i} className="border p-3 rounded">
+          <strong>{e.stage}</strong>
+          <pre>{JSON.stringify(e.data, null, 2)}</pre>
         </div>
       ))}
     </div>

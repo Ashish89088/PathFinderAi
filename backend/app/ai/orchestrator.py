@@ -21,9 +21,9 @@ def run_career_ai_pipeline(normalized_profile: dict) -> dict:
 
         return {
             "status": "success",
-            "skill_inference_raw": skill_response,
-            "career_matching_raw": career_response,
-            "roadmap_raw": roadmap_response
+            "skill_inference": skill_response,
+            "career_matching": career_response,
+            "roadmap": roadmap_response
         }
 
     except Exception as e:

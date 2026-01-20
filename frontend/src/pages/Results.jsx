@@ -1,35 +1,36 @@
+import { useParams } from "react-router-dom";
+import StreamingResults from "./StreamingResults";
 import CareerCard from "../components/CareerCard";
-
-const mockData = {
-  career_recommendations: [
-    {
-      career: "Software Engineer",
-      reasoning: "Strong tech inclination and coding presence",
-      confidence: 0.82,
-      roadmap: [
-        "Master DSA",
-        "Build 3 real-world projects",
-        "Apply for internships"
-      ],
-      opportunities: {
-        certifications: ["AWS", "Google Cloud"],
-        events: ["Hackathons", "Meetups"]
-      }
-    }
-  ]
-};
-
+import { useState } from "react";
 
 export default function Results() {
+  const { userId } = useParams();
+
+  const [finalResult, setFinalResult] = useState(null);
+  console.log("Final Result: Page");
+
   return (
     <div className="p-6 max-w-5xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Your Career Matches</h1>
+      <h1 className="text-2xl font-bold mb-4">
+        Your Career Analysis
+      </h1>
 
-      <div className="grid md:grid-cols-2 gap-4">
-        {mockData.career_recommendations.map((item, index) => (
-          <CareerCard key={index} data={item} />
-        ))}
-      </div>
+      {/* STEP 1: STREAMING */}
+      {!finalResult && (
+        <StreamingResults
+          userId={userId}
+          onComplete={setFinalResult}
+        />
+      )}
+
+      {/* STEP 2: FINAL RESULTS */}
+      {finalResult && (
+        <div className="grid md:grid-cols-2 gap-4 mt-6">
+          {finalResult.career_recommendations.map((item, index) => (
+            <CareerCard key={index} data={item} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
