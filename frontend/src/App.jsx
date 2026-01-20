@@ -10,8 +10,9 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/profile" element={<ProfileWizard />} />
-        <Route path="/results" element={<Results />} />
-        <Route path="/stream" element={<StreamingResults />} />
+        {/* <Route path="/results" element={<Results />} /> */}
+        <Route path="/results/:userId" element={<Results />} />
+        {/* <Route path="/results/:userId" element={<StreamingResults />} /> */}
       </Routes>
     </BrowserRouter>
   );

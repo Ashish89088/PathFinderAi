@@ -9,7 +9,7 @@ from uuid import UUID
 
 
 from app.services.profile_normalizer import normalize_profile
-from app.ai.orchestrator import run_career_ai_pipeline
+# from app.ai.orchestrator import run_career_ai_pipeline
 from app.services.gemini import call_gemini
 from app.services.career_analysis_service import save_career_analysis
 
@@ -50,18 +50,18 @@ def submit_profile(data: ProfileCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(profile)
 
-    normalized_data = normalize_profile({
-        "interests": data.interests,
-        "hobbies": data.hobbies,
-        "academics": data.academics,
-        "platforms": data.platforms
-    })
+    # normalized_data = normalize_profile({
+    #     "interests": data.interests,
+    #     "hobbies": data.hobbies,
+    #     "academics": data.academics,
+    #     "platforms": data.platforms
+    # })
 
-    print("NORMALIZED PROFILE:", normalized_data)
+    # print("NORMALIZED PROFILE:", normalized_data)
 
-    ai_result = run_career_ai_pipeline(normalized_data)
+    # ai_result = run_career_ai_pipeline(normalized_data)
 
-    print("AI RESULT:", ai_result)
+    # print("AI RESULT:", ai_result)
 
 
 
@@ -107,7 +107,7 @@ def analyze_profile(user_id: UUID, db: Session = Depends(get_db)):
     }
 
 
-@router.get("/api/analyze-profile/stream")
+@router.get("/analyze-profile/stream")
 def analyze_profile_stream(user_id: UUID, db: Session = Depends(get_db)):
     # fetch + normalize profile (reuse your logic)
     profile = db.query(Profile).filter(Profile.user_id == user_id).first()
@@ -117,3 +117,4 @@ def analyze_profile_stream(user_id: UUID, db: Session = Depends(get_db)):
         gemini_stream(normalized),
         media_type="text/event-stream"
     )
+

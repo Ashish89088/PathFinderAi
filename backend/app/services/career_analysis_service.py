@@ -10,14 +10,6 @@ def save_career_analysis(
 ):
     print("Gemini result:", gemini_result)
 
-    # parsed = parse_gemini_output(
-    #     skill_inference = gemini_result.get("skill_inference", ""),
-    #     career_matching = gemini_result.get("career_matching", []),
-    #     roadmap = gemini_result.get("roadmap", {}),
-    #     opportunities = gemini_result.get("opportunities", {})
-
-    # )
-
     parsed = parse_gemini_output(gemini_result)
 
 
