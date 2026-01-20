@@ -13,4 +13,3 @@ def gemini_stream(normalized_profile):
             "data": value
         }
         yield f"data: {json.dumps(payload)}\n\n"
-
