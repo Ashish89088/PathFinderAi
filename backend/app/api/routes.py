@@ -16,6 +16,9 @@ from app.services.career_analysis_service import save_career_analysis
 from fastapi.responses import StreamingResponse
 from app.services.gemini_stream import gemini_stream
 
+from app.models.profile import Profile
+from app.models.career_analysis import CareerAnalysis
+
 
 router = APIRouter(prefix="/api", tags=["Profile"])
 
@@ -70,13 +73,12 @@ def submit_profile(data: ProfileCreate, db: Session = Depends(get_db)):
         "profile_id": str(profile.id),
         "message": "Profile data stored successfully"
     }
-
-from app.models.profile import Profile
     
 
 @router.post("/analyze-profile")
 
 def analyze_profile(user_id: UUID, db: Session = Depends(get_db)):
+    print("Analyzing profile for user_id:", user_id)
     profile = db.query(Profile).filter(Profile.user_id == user_id).first()
 
     if not profile:
@@ -118,3 +120,7 @@ def analyze_profile_stream(user_id: UUID, db: Session = Depends(get_db)):
         media_type="text/event-stream"
     )
 
+# Get a single analysis
+@router.get("/history")
+def get_analysis(user_id: UUID, db: Session = Depends(get_db)):
+    return db.query(CareerAnalysis).filter(CareerAnalysis.user_id == user_id).first()

@@ -11,7 +11,7 @@ class GeminiClient:
         try:
             response = self.client.models.generate_content(
                 model="gemini-3-flash-preview",
-                contents="How does AI work?"
+                contents=""
             )
 
             print("gemini response is",response)

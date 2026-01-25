@@ -4,6 +4,8 @@ import { useEffect, useRef } from "react";
 
 export default function StreamingResults({ userId, onComplete }) {
 
+  console.log("StreamingResults User ID:", userId);
+
   const events = useGeminiStream(userId);
   const completedRef = useRef(false);
 
