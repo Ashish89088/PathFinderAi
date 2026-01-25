@@ -4,6 +4,8 @@ import { useEffect, useRef } from "react";
 
 export default function StreamingResults({ userId, onComplete }) {
 
+  console.log("StreamingResults User ID:", userId);
+
   const events = useGeminiStream(userId);
   const completedRef = useRef(false);
 
@@ -13,7 +15,7 @@ export default function StreamingResults({ userId, onComplete }) {
     const last = events[events.length - 1];
 
     if (last.stage === "final_result" && !completedRef.current) {
-      completedRef.current = true; // 🔒 prevent double call
+      completedRef.current = true; // prevent double call
       onComplete(last.data);
     }
   }, [events, onComplete]);

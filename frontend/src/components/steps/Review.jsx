@@ -27,7 +27,7 @@ export default function Review({ data }) {
       console.log("Profile submitted successfully!");
       console.log(res.data);
       const userId = res.data.user_id;
-      navigate(`/results/${userId}`);
+      navigate(`/analyze-profile/${userId}`);
       
     } catch (err) {
       console.error(err);

@@ -1,3 +1,4 @@
+import datetime
 from sqlalchemy.orm import Session
 from app.models.career_analysis import CareerAnalysis
 from app.services.ai_parser import parse_gemini_output
@@ -19,7 +20,8 @@ def save_career_analysis(
         career_recommendations=parsed["career_recommendations"],
         roadmaps=parsed["roadmaps"],
         opportunities=parsed["opportunities"],
-        raw_ai_output=gemini_result
+        raw_ai_output=gemini_result,
+        created_at=datetime.datetime.now()
     )
 
     db.add(analysis)
